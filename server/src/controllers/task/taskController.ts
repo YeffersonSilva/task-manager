@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import TaskModel, { ITask } from '../../models/task/TaskModel.ts';
+import { IUser } from '../../models/auth/UserModel.ts';
+import mongoose from "mongoose";
 
 interface AuthenticatedRequest extends Request {
-  user?: {
-    _id: string;
-  };
+  user?: IUser & { _id: mongoose.Types.ObjectId };
 }
 
 export const createTask = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
