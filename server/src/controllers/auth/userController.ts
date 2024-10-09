@@ -141,3 +141,59 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     res.status(400).json({ message: "Invalid email or password" });
   }
 });
+export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    path: "/",
+  });
+
+  res.status(200).json({ message: "User logged out" });
+});
+
+export const getUser = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) {
+    res.status(401).json({ message: "User not authenticated" });
+    return;
+  }
+
+  const user = await User.findById(req.user._id).select("-password");
+
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+});
+
+export const updateUser = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) {
+    res.status(401).json({ message: "User not authenticated" });
+    return;
+  }
+
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    const { name, bio, photo } = req.body;
+    user.name = name || user.name;
+    user.bio = bio || user.bio;
+    user.photo = photo || user.photo;
+
+    const updated = await user.save();
+
+    res.status(200).json({
+      _id: updated._id,
+      name: updated.name,
+      email: updated.email,
+      role: updated.role,
+      photo: updated.photo,
+      bio: updated.bio,
+      isVerified: updated.isVerified,
+    });
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+});
+
