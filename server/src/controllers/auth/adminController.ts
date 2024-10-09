@@ -24,3 +24,18 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response): Prom
   }
 });
 
+export const getAllUsers = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users: UserDocument[] = await User.find({});
+
+    if (users.length === 0) {
+      res.status(404).json({ message: "No users found" });
+      return;
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error getting users:', error);
+    res.status(500).json({ message: "Cannot get users" });
+  }
+});
