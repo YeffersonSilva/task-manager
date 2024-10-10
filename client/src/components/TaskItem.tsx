@@ -35,7 +35,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEdit }) => {
       )}`}
     >
       <div className="flex items-center">
-        <button onClick={toggleCompleted} className="mr-2">
+        <button
+          aria-label={task.completed ? "mark as incomplete" : "mark as completed"}
+          onClick={toggleCompleted}
+          className="mr-2"
+        >
           {task.completed ? (
             <FiCheckCircle className="text-green-500" />
           ) : (
@@ -54,11 +58,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onEdit }) => {
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <button onClick={() => onEdit(task)}>
-          <FiEdit className="text-gray-600 hover:text-gray-800 transition" />
+        <button aria-label="edit" onClick={() => onEdit(task)}>
+          <FiEdit className="text-gray-600 transition hover:text-gray-800" />
         </button>
-        <button onClick={() => deleteTask(task._id || "")}>
-          <FiTrash className="text-red-500 hover:text-red-700 transition" />
+        <button aria-label="delete" onClick={() => deleteTask(task._id || "")}>
+          <FiTrash className="text-red-500 transition hover:text-red-700" />
         </button>
       </div>
     </div>

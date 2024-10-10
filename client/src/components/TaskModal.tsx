@@ -83,8 +83,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task }) => {
           {task ? "Editar Tarefa" : "Adicionar Tarefa"}
         </h2>
         <div className="mb-4">
-          <label className="block mb-1">Título</label>
+          <label htmlFor="title" className="block mb-1">
+            Título
+          </label>
           <input
+            id="title"
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -93,8 +96,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Descrição</label>
+          <label htmlFor="description" className="block mb-1">
+            Descrição
+          </label>
           <textarea
+            id="description"
             name="description"
             value={formData.description}
             onChange={handleChange}
@@ -102,8 +108,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Prioridade</label>
+          <label htmlFor="priority" className="block mb-1">
+            Prioridade
+          </label>
           <select
+            id="priority"
             name="priority"
             value={formData.priority}
             onChange={handleChange}
@@ -116,13 +125,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, task }) => {
         </div>
         <div className="flex items-center mb-4">
           <input
+            id="completed"
             type="checkbox"
             name="completed"
             checked={formData.completed || false}
             onChange={handleChange}
             className="mr-2"
           />
-          <label>Concluída</label>
+          <label htmlFor="completed">Concluída</label>
         </div>
         <div className="flex justify-end gap-2">
           <button

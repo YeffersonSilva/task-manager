@@ -97,12 +97,14 @@ const Sidebar: React.FC = () => {
       </div>
       {/* Botão do Menu Móvel */}
       <button
-        onClick={() => setShowMenu(!showMenu)}
-        className="lg:hidden fixed right-4 bottom-4 text-2xl bg-[#7209b7] p-2.5 rounded-full text-white shadow-lg hover:bg-[#9a4fd3] transition-all duration-200 ease-in-out z-50"
-        style={{ fontFamily: "Arial, sans-serif" }}
-      >
-        {showMenu ? <RiCloseFill /> : <RiMenuFill />}
-      </button>
+  aria-label="Toggle menu"
+  onClick={() => setShowMenu(!showMenu)}
+  className="lg:hidden fixed right-4 bottom-4 text-2xl bg-[#7209b7] p-2.5 rounded-full text-white shadow-lg hover:bg-[#9a4fd3] transition-all duration-200 ease-in-out z-50"
+  style={{ fontFamily: "Arial, sans-serif" }}
+>
+  {showMenu ? <RiCloseFill /> : <RiMenuFill />}
+</button>
+
     </>
   );
 };

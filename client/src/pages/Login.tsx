@@ -5,6 +5,7 @@ import { AuthContext } from "../contex/AuthContext";
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -12,9 +13,10 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       await login(email, password);
+      setError(null);
       navigate("/tasks");
     } catch (error: any) {
-      alert(error.message);
+      setError(error.message);
     }
   };
 
@@ -30,10 +32,14 @@ const Login: React.FC = () => {
           <p className="mb-4 text-center text-gray-500">
             Use seu e-mail e senha para acessar
           </p>
+          {error && <div role="alert" className="mb-4 text-red-500">{error}</div>}
           <form onSubmit={handleLogin}>
             <div className="mb-4">
-              <label className="block mb-2 text-gray-700">E-mail</label>
+              <label htmlFor="email" className="block mb-2 text-gray-700">
+                E-mail
+              </label>
               <input
+                id="email"
                 type="email"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 value={email}
@@ -42,8 +48,11 @@ const Login: React.FC = () => {
               />
             </div>
             <div className="mb-6">
-              <label className="block mb-2 text-gray-700">Senha</label>
+              <label htmlFor="password" className="block mb-2 text-gray-700">
+                Senha
+              </label>
               <input
+                id="password"
                 type="password"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 value={password}
