@@ -21,9 +21,14 @@ const Register: React.FC = () => {
     }
   };
 
+  const toggleLoginRegister = () => {
+    setIsLogin(!isLogin);
+    navigate(isLogin ? "/register" : "/login");
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-200 to-gray-400">
-      <div className={`bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-lg transform transition-all duration-500 ${isLogin ? 'translate-x-0' : ''}`}>
+      <div className="w-full max-w-lg overflow-hidden transition-all duration-500 transform bg-white rounded-lg shadow-lg">
         <div className="p-8">
           <h2 className="mb-6 text-3xl font-bold text-center">{isLogin ? "Entrar" : "Cadastrar-se"}</h2>
           <p className="mb-4 text-center text-gray-500">
@@ -74,7 +79,7 @@ const Register: React.FC = () => {
           <p className="text-gray-600">
             {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}{" "}
             <button
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={toggleLoginRegister}
               className="text-purple-500 hover:underline"
             >
               {isLogin ? "Cadastre-se" : "Entrar"}
