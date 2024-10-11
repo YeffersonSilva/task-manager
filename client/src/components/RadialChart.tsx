@@ -31,7 +31,7 @@ const RadialChart: React.FC = () => {
       endAngle={-270}
     >
       <RadialBar
-        label={{ position: "insideStart", fill: "#fff" }} // Ajusta la posición y estilo de las etiquetas
+        label={{ position: "insideStart", fill: "#fff" }} 
         background
         dataKey="value"
       />

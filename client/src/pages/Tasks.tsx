@@ -8,9 +8,8 @@ import { AuthContext } from "../contex/AuthContext";
 import { ITask } from "../types/Task";
 import { RiAddLine } from "react-icons/ri";
 
-// Mapa de traducción de prioridades
 const priorityMap: Record<string, string> = {
-  todas: "", // Esto permitirá que "todas" muestre todas las prioridades.
+  todas: "", 
   baixa: "low",
   média: "medium",
   alta: "high",
@@ -37,7 +36,6 @@ const Tasks: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // Filtrado de tareas basado en prioridad, estado de completitud y término de búsqueda
   const filteredTasks = tasks.filter((task) => {
     const mappedPriority = priorityMap[priorityFilter.toLowerCase()];
     const matchesPriority =

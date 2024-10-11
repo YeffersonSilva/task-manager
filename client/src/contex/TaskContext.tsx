@@ -41,12 +41,11 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
   const [completionFilter, setCompletionFilter] = useState<string>("todas");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { user } = useContext(AuthContext); // Escuchamos los cambios en el usuario
+  const { user } = useContext(AuthContext); 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // Función para obtener las tareas desde el backend
   const fetchTasks = async () => {
-    if (!user) return; // Solo intentamos obtener las tareas si hay un usuario autenticado
+    if (!user) return; 
 
     try {
       const response = await fetch(`${API_URL}/tasks`, {
@@ -68,10 +67,9 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Efecto para obtener las tareas cuando el usuario cambia
   useEffect(() => {
     fetchTasks();
-  }, [user, API_URL]); // Se ejecuta cada vez que cambia el usuario o la URL de la API
+  }, [user, API_URL]);
 
   return (
     <TaskContext.Provider
