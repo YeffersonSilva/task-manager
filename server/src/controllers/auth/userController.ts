@@ -9,6 +9,19 @@ import crypto from "crypto";
 import hashToken from "../../helpers/hashToken.ts";
 import mongoose, { Document } from "mongoose";
 
+/**
+ * Interface for User Document in MongoDB.
+ * @typedef {Object} UserDocument
+ * @property {mongoose.Types.ObjectId} _id - The unique identifier for the user.
+ * @property {string} name - The name of the user.
+ * @property {string} email - The email of the user.
+ * @property {string} password - The hashed password of the user.
+ * @property {string} role - The role of the user.
+ * @property {string} photo - The user's profile photo URL.
+ * @property {string} bio - The user's bio.
+ * @property {boolean} isVerified - Whether the user's email is verified.
+ */
+
 interface UserDocument extends Document {
   _id: mongoose.Types.ObjectId;
   name: string;
@@ -39,6 +52,13 @@ declare global {
   }
 }
 
+/**
+ * Register a new user.
+ * @param {Request} req - Express request object containing user details in the body.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<void>} - Returns a JSON response with user information and authentication token.
+ */
+
 export const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
@@ -64,7 +84,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
     email,
     password,
   });
-
+//  Token generation
   const token = generateToken(user._id.toString());
 
   res.cookie("token", token, {
@@ -91,7 +111,12 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
     res.status(400).json({ message: "Invalid user data" });
   }
 });
-
+/**
+ * Log in an existing user.
+ * @param {Request} req - Express request object containing email and password in the body.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<void>} - Returns a JSON response with user details and authentication token.
+ */
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -141,6 +166,13 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     res.status(400).json({ message: "Invalid email or password" });
   }
 });
+
+/**
+ * Log out a user by clearing the authentication cookie.
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<void>} - Returns a JSON response indicating successful logout.
+ */
 export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -152,6 +184,7 @@ export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({ message: "User logged out" });
 });
 
+// user verification
 export const getUser = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) {
     res.status(401).json({ message: "User not authenticated" });

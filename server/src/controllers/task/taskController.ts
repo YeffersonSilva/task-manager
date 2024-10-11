@@ -5,9 +5,23 @@ import TaskModel, { ITask } from "../../models/task/TaskModel.ts";
 import User, { UserDocument } from "../../models/auth/UserModel.ts"; // Import UserDocument
 import mongoose from "mongoose";
 
+
+/**
+ * Interface for an authenticated request, extending the Express Request type.
+ * @typedef {Object} AuthenticatedRequest
+ * @property {UserDocument} [user] - The authenticated user document.
+ */
 interface AuthenticatedRequest extends Request {
   user?: UserDocument; 
 }
+
+
+/**
+ * Create a new task for the authenticated user.
+ * @param {AuthenticatedRequest} req - Express request object containing task details.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<void>} - Returns a JSON response with the created task.
+ */
 
 export const createTask = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
@@ -51,7 +65,12 @@ export const createTask = asyncHandler(
   }
 );
 
-// Get all tasks of the authenticated user
+/**
+ * Get all tasks of the authenticated user.
+ * @param {AuthenticatedRequest} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @returns {Promise<void>} - Returns a JSON response with the list of tasks.
+ */
 
 export const getTasks = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {

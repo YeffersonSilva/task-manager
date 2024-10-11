@@ -10,11 +10,15 @@ import errorHandler from "./helpers/errorhandler.ts";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from '../swaggerConfig.ts';
 
+// Load environment variables from a .env file into process.env
+
 dotenv.config();
 
 const port = process.env.PORT || 8000;
 
 const app = express();
+
+// Configure CORS to allow requests from the specified client URL with credentials
 
 app.use(
   cors({
@@ -32,6 +36,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const routeFiles = fs.readdirSync(path.resolve(__dirname, './routes')).filter(file => file.endsWith(".ts"));
+
+// Import and register each route with the "/api/v1" path prefix
 
 routeFiles.forEach((file) => {
   import(`./routes/${file}`)
