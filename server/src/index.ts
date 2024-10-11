@@ -1,3 +1,4 @@
+// index.ts
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -32,8 +33,11 @@ app.use(cookieParser());
 app.use(errorHandler);
 
 // Obtener la ruta del archivo actual usando import.meta.url
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 // Cargar dinámicamente los archivos de rutas desde la carpeta 'routes'
 const routeFiles = fs.readdirSync(path.resolve(__dirname, './routes')).filter(file => file.endsWith(".ts"));
@@ -49,7 +53,10 @@ routeFiles.forEach((file) => {
     });
 });
 
-// Función para iniciar el servidor
+// Exportar `app` para las pruebas
+export { app };
+
+// Iniciar el servidor
 const server = async () => {
   try {
     // Conectar a la base de datos
@@ -60,10 +67,8 @@ const server = async () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
-    //console.log("Failed to start server.....", error.message);
     process.exit(1);
   }
 };
 
-// Iniciar el servidor
 server();
