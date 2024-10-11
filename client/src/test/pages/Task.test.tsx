@@ -4,7 +4,7 @@ import Tasks from '../../pages/Tasks';
 import { TaskContext } from '../../contex/TaskContext';
 import { AuthContext } from '../../contex/AuthContext';
 import { ITask } from '../../types/Task';
-// import '@testing-library/jest-dom/extend-expect'; // Asegúrate de que jest-dom esté configurado correctamente en setupTests
+// import '@testing-library/jest-dom/extend-expect'; 
 
 const mockTasks: ITask[] = [
   {
@@ -66,7 +66,6 @@ describe('Tasks Component', () => {
     );
   
     expect(screen.getByRole('heading', { name: /Faza sua Tarefa/i })).toBeInTheDocument();
-    // Selecciona el primer elemento que tenga el texto "Yefferson"
     expect(screen.getAllByText(/Yefferson/i)[0]).toBeInTheDocument();
   });
   
@@ -96,7 +95,7 @@ describe('Tasks Component', () => {
     const addButton = screen.getByRole('button', { name: /adicionar tarefa/i });
     fireEvent.click(addButton);
 
-    // Busca el título dentro del modal de forma más específica
+   
     const modalTitle = screen.getAllByText(/Adicionar Tarefa/i)[0];
     expect(modalTitle).toBeInTheDocument();
   });
@@ -110,11 +109,11 @@ describe('Tasks Component', () => {
       </AuthContext.Provider>
     );
 
-    // Simula el clic en el botón de editar dentro del TaskItem
+ 
     const editButtons = screen.getAllByRole('button', { name: /edit/i });
     fireEvent.click(editButtons[0]);
 
-    // Verifica si el modal de edición está visible
+    
     const modalTitle = screen.getByText(/Editar Tarefa/i);
     expect(modalTitle).toBeInTheDocument();
   });

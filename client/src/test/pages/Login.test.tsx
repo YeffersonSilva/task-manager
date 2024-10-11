@@ -43,10 +43,8 @@ describe('Login Component', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
-    // Usa un solo waitFor para verificar la llamada de login
     await waitFor(() => expect(mockAuthContextValue.login).toHaveBeenCalledWith('test@example.com', 'password123'));
 
-    // Usa un segundo waitFor para verificar la navegación
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/tasks'));
   });
 
@@ -70,11 +68,10 @@ describe('Login Component', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
-    // Usa waitFor para esperar que el mensaje de error se muestre
+   
     const alertElement = await screen.findByRole('alert');
     expect(alertElement).toHaveTextContent(errorMessage);
 
-    // Verifica que la función de login haya sido llamada con los parámetros correctos
     expect(mockAuthContextValue.login).toHaveBeenCalledWith('test@example.com', 'wrongpassword');
   });
 });
