@@ -52,7 +52,6 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
         credentials: "include",
       });
       const data = await response.json();
-      console.log("Data received from API:", data);
       if (response.ok) {
         if (Array.isArray(data)) {
           setTasks(data);
