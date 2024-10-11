@@ -19,7 +19,7 @@ const TaskSchema: Schema = new Schema(
     title: {
       type: String,
       required: [true, 'Please provide a title'],
-      unique: true,
+     // unique: true,
     },
     description: {
       type: String,

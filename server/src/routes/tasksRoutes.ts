@@ -6,7 +6,7 @@ import {
   getTasks,
   updateTask,
 } from '../controllers/task/taskController.ts';
-import { protect } from '../middleware/authMiddleware.ts';
+import protect from '../middleware/authMiddleware.ts';
 
 const router = express.Router();
 
