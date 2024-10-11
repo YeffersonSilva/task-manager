@@ -1,0 +1,217 @@
+openapi: 3.0.0
+info:
+  title: Task API
+  version: 1.0.0
+  description: API for managing tasks with user authentication
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Task:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        id:
+          type: string
+          example: "634c8e3e2f7b4a0012e1eaa4"
+        title:
+          type: string
+          example: "Complete project documentation"
+        description:
+          type: string
+          example: "Finish the Swagger documentation for the project."
+        dueDate:
+          type: string
+          format: date
+          example: "2024-10-15"
+        priority:
+          type: string
+          example: "high"
+        status:
+          type: string
+          example: "in progress"
+        completed:
+          type: boolean
+          example: false
+        user:
+          type: string
+          example: "634c8e3e2f7b4a0012e1eaa5"
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not authorized!"
+
+paths:
+  /api/v1/task/create:
+    post:
+      summary: Create a new task
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Complete project documentation"
+                description:
+                  type: string
+                  example: "Finish the Swagger documentation for the project."
+                dueDate:
+                  type: string
+                  format: date
+                  example: "2024-10-15"
+                priority:
+                  type: string
+                  example: "high"
+                status:
+                  type: string
+                  example: "in progress"
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid input
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /api/v1/tasks:
+    get:
+      summary: Get all tasks for the authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  length:
+                    type: integer
+                    example: 2
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /api/v1/task/{id}:
+    get:
+      summary: Get a specific task
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "634c8e3e2f7b4a0012e1eaa4"
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Task not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    patch:
+      summary: Update a specific task
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "634c8e3e2f7b4a0012e1eaa4"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Update project documentation"
+                description:
+                  type: string
+                  example: "Finish updating the Swagger docs."
+                dueDate:
+                  type: string
+                  format: date
+                  example: "2024-10-20"
+                priority:
+                  type: string
+                  example: "medium"
+                status:
+                  type: string
+                  example: "completed"
+                completed:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Task not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    delete:
+      summary: Delete a specific task
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "634c8e3e2f7b4a0012e1eaa4"
+      responses:
+        '200':
+          description: Task deleted successfully
+        '404':
+          description: Task not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
