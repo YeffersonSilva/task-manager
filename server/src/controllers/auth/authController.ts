@@ -5,6 +5,7 @@ import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
 import generateToken from '../../helpers/generateToken.ts';
 import User from '../../models/auth/UserModel.ts';
+import jwt from 'jsonwebtoken';
 
 // Registro de usuario
 export const registerUser = asyncHandler(async (req: Request, res: Response) => {
@@ -66,58 +67,41 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
 });
 
 // Inicio de sesión
+// src/controllers/auth/authController.ts
+
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  // Validación
+  // Validar entrada del usuario
   if (!email || !password) {
-    res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    res.status(400).json({ message: 'Por favor, ingrese email y contraseña' });
     return;
   }
 
-  // Verificar si el usuario existe
   const user = await User.findOne({ email });
 
   if (!user) {
-    res.status(404).json({ message: 'Usuario no encontrado, regístrate' });
+    res.status(400).json({ message: 'Usuario no encontrado' });
     return;
   }
 
-  // Verificar contraseña
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-  if (!isMatch) {
-    res.status(400).json({ message: 'Credenciales inválidas' });
+  if (!isPasswordCorrect) {
+    res.status(400).json({ message: 'Contraseña incorrecta' });
     return;
   }
 
   // Generar token
-  const token = generateToken(user._id.toString());
-
-  // Configurar cookie
-  res.cookie('token', token, {
-    path: '/',
-    httpOnly: true,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días
-    sameSite: 'none',
-    secure: true,
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
+    expiresIn: '1d',
   });
 
-  if (user && isMatch) {
-    const { _id, name, email, role, photo, bio, isVerified } = user;
-    res.status(200).json({
-      _id,
-      name,
-      email,
-      role,
-      photo,
-      bio,
-      isVerified,
-      token,
-    });
-  } else {
-    res.status(400).json({ message: 'Email o contraseña inválidos' });
-  }
+  // Devolver el token en la respuesta
+  res.status(200).json({
+    message: 'Inicio de sesión exitoso',
+    token,
+  });
 });
 
 // Cierre de sesión
