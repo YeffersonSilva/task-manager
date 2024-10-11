@@ -1,4 +1,3 @@
-// src/routes/userRoutes.ts
 
 import express, { Router } from "express"; // Import express and Router
 import {

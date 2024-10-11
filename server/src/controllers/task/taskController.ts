@@ -1,13 +1,12 @@
-// src/controllers/task/taskController.ts
 
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import TaskModel, { ITask } from "../../models/task/TaskModel.ts";
-import User, { UserDocument } from "../../models/auth/UserModel.ts"; // Importa UserDocument
+import User, { UserDocument } from "../../models/auth/UserModel.ts"; // Import UserDocument
 import mongoose from "mongoose";
 
 interface AuthenticatedRequest extends Request {
-  user?: UserDocument; // Ahora TypeScript reconocerá UserDocument
+  user?: UserDocument; 
 }
 
 export const createTask = asyncHandler(
@@ -16,7 +15,7 @@ export const createTask = asyncHandler(
 
     if (!title || title.trim() === "") {
       res.status(400).json({ message: "Title is required!" });
-      return; // Añadimos return aquí para asegurarnos de que la función no continúe.
+      return; 
     }
 
     if (!description || description.trim() === "") {
@@ -24,7 +23,7 @@ export const createTask = asyncHandler(
       return;
     }
 
-    // Aquí se verifica si ya existe una tarea con el mismo título para el usuario.
+    // This checks if a task with the same title already exists for the user.
     const existingTask = await TaskModel.findOne({
       title: title.trim(),
       user: req.user?._id,
@@ -52,7 +51,8 @@ export const createTask = asyncHandler(
   }
 );
 
-// Obtener todas las tareas del usuario autenticado
+// Get all tasks of the authenticated user
+
 export const getTasks = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const userId = req.user?._id;
@@ -71,7 +71,7 @@ export const getTasks = asyncHandler(
   }
 );
 
-// Obtener una tarea específica del usuario autenticado
+// Get a specific task from the authenticated user
 export const getTask = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const userId = req.user?._id;
@@ -98,7 +98,7 @@ export const getTask = asyncHandler(
   }
 );
 
-// Actualizar una tarea existente del usuario autenticado
+// Update an existing task of the authenticated user
 export const updateTask = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const userId = req.user?._id;
@@ -135,7 +135,7 @@ export const updateTask = asyncHandler(
   }
 );
 
-// Eliminar una tarea específica del usuario autenticado
+// Delete a specific task from the authenticated user
 export const deleteTask = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const userId = req.user?._id;
@@ -158,7 +158,7 @@ export const deleteTask = asyncHandler(
   }
 );
 
-// Eliminar todas las tareas del usuario autenticado
+// Delete all tasks for the authenticated user
 export const deleteAllTasks = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     const userId = req.user?._id;

@@ -25,7 +25,7 @@ const userSchema = new Schema<UserDocument>(
   { timestamps: true }
 );
 
-// Encriptar contraseña antes de guardar
+// Encrypt password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
