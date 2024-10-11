@@ -1,102 +1,119 @@
-Task Manager API
+# Task Manager API
 
 Este projeto é uma aplicação backend e frontend para gerenciamento de tarefas. A API é construída com Node.js, Express e MongoDB, enquanto o frontend utiliza React.
 
-Índice
+## Índice
 
-- Pré-requisitos
-- Instalação
-- Configuração
-- Scripts Disponíveis
-- Utilizando Docker
-- Documentação da API
-- Tecnologias Utilizadas
-- Como Contribuir
-- Licença
+1. [Pré-requisitos](#pré-requisitos)
+2. [Instalação](#instalação)
+3. [Configuração](#configuração)
+4. [Scripts Disponíveis](#scripts-disponíveis)
+5. [Utilizando Docker](#utilizando-docker)
+6. [Documentação da API](#documentação-da-api)
+7. [Tecnologias Utilizadas](#tecnologias-utilizadas)
+8. [Como Contribuir](#como-contribuir)
+9. [Licença](#licença)
 
-Pré-requisitos
+## Pré-requisitos
 
 - Node.js (v18 ou superior)
 - NPM
 - Docker (opcional)
 - MongoDB
 
-Instalação
+## Instalação
 
-Backend
+### Backend
 
+```bash
+# Clone o repositório
 git clone https://github.com/seu-usuario/task-manager.git
+# Navegue até a pasta do backend
 cd task-manager/server
+# Instale as dependências
 npm install
+```
 
-Frontend
+### Frontend
 
+```bash
+# Navegue até a pasta do frontend
 cd task-manager/client
+# Instale as dependências
 npm install
+```
 
-Configuração
+## Configuração
 
-Backend (.env)
+### Backend (.env)
 
+```
 PORT=8000
 MONGO_URI=sua_conexao_com_mongodb
 JWT_SECRET=sua_chave_secreta
 CLIENT_URL=http://localhost:3000
+```
 
-Frontend (.env)
+### Frontend (.env)
 
+```
 REACT_APP_API_URL=http://localhost:8000/api/v1
+```
 
-Scripts Disponíveis
+## Scripts Disponíveis
 
-Backend
+### Backend
 
-- Desenvolvimento: npm run dev
-- Build: npm run build
-- Testes: npm test
+- **Desenvolvimento**: `npm run dev`
+- **Build**: `npm run build`
+- **Testes**: `npm test`
 
-Frontend
+### Frontend
 
-- Desenvolvimento: npm start
-- Build: npm run build
+- **Desenvolvimento**: `npm start`
+- **Build**: `npm run build`
 
-Utilizando Docker
+## Utilizando Docker
 
+```bash
 docker-compose up --build
+```
 
-Documentação da API
+## Documentação da API
 
-Acesse http://localhost:8000/api-docs para a documentação Swagger.
+Acesse [http://localhost:8000/api-docs](http://localhost:8000/api-docs) para a documentação Swagger.
 
-Principais Endpoints
+### Principais Endpoints
 
-- Autenticação:
-  - POST /api/v1/auth/register
-  - POST /api/v1/auth/login
-  - POST /api/v1/auth/logout
+#### Autenticação:
 
-- Tarefas:
-  - POST /api/v1/task/create
-  - GET /api/v1/tasks
-  - GET /api/v1/task/:id
-  - PATCH /api/v1/task/:id
-  - DELETE /api/v1/task/:id
-  - DELETE /api/v1/tasks
+- **POST** `/api/v1/auth/register`
+- **POST** `/api/v1/auth/login`
+- **POST** `/api/v1/auth/logout`
 
-Tecnologias Utilizadas
+#### Tarefas:
 
-- Backend: Node.js, Express, MongoDB, Mongoose, JWT
-- Frontend: React, Context API, TypeScript
-- Docker e Docker Compose
+- **POST** `/api/v1/task/create`
+- **GET** `/api/v1/tasks`
+- **GET** `/api/v1/task/:id`
+- **PATCH** `/api/v1/task/:id`
+- **DELETE** `/api/v1/task/:id`
+- **DELETE** `/api/v1/tasks`
 
-Como Contribuir
+## Tecnologias Utilizadas
+
+- **Backend**: Node.js, Express, MongoDB, Mongoose, JWT
+- **Frontend**: React, Context API, TypeScript
+- **Docker e Docker Compose**
+
+## Como Contribuir
 
 1. Faça um fork do repositório
-2. Crie uma branch para sua feature (git checkout -b feature/AmazingFeature)
-3. Faça commit das suas mudanças (git commit -m 'Add some AmazingFeature')
-4. Push para a branch (git push origin feature/AmazingFeature)
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Faça commit das suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-Licença
+## Licença
 
-Distribuído sob a licença MIT. Veja LICENSE para mais informações.
+Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais informações.
