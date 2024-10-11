@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { ITask } from "../types/Task";
+import { AuthContext } from "./AuthContext";
 
 // Definición de la interfaz para el contexto
 interface TaskContextProps {
@@ -40,10 +41,13 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
   const [completionFilter, setCompletionFilter] = useState<string>("todas");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  const { user } = useContext(AuthContext); // Escuchamos los cambios en el usuario
   const API_URL = process.env.REACT_APP_API_URL;
 
   // Función para obtener las tareas desde el backend
   const fetchTasks = async () => {
+    if (!user) return; // Solo intentamos obtener las tareas si hay un usuario autenticado
+
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         credentials: "include",
@@ -64,68 +68,59 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Función para crear una nueva tarea
-  const createTask = async (task: ITask) => {
-    try {
-      const response = await fetch(`${API_URL}/task/create`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(task),
-      });
-      if (response.ok) {
-        await fetchTasks();
-      }
-    } catch (error) {
-      console.error("Error creating task:", error);
-    }
-  };
-
-  // Función para actualizar una tarea existente
-  const updateTask = async (task: ITask) => {
-    try {
-      const response = await fetch(`${API_URL}/task/${task._id}`, {
-        method: "PATCH",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(task),
-      });
-      if (response.ok) {
-        await fetchTasks();
-      }
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
-  };
-
-  // Función para eliminar una tarea
-  const deleteTask = async (id: string) => {
-    try {
-      const response = await fetch(`${API_URL}/task/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (response.ok) {
-        await fetchTasks();
-      }
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
-  };
-
-  // Efecto para obtener las tareas cuando se monta el componente
+  // Efecto para obtener las tareas cuando el usuario cambia
   useEffect(() => {
     fetchTasks();
-  }, [API_URL]);
+  }, [user, API_URL]); // Se ejecuta cada vez que cambia el usuario o la URL de la API
 
   return (
     <TaskContext.Provider
       value={{
         tasks,
         fetchTasks,
-        createTask,
-        updateTask,
-        deleteTask,
+        createTask: async (task) => {
+          try {
+            const response = await fetch(`${API_URL}/task/create`, {
+              method: "POST",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(task),
+            });
+            if (response.ok) {
+              await fetchTasks();
+            }
+          } catch (error) {
+            console.error("Error creating task:", error);
+          }
+        },
+        updateTask: async (task) => {
+          try {
+            const response = await fetch(`${API_URL}/task/${task._id}`, {
+              method: "PATCH",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(task),
+            });
+            if (response.ok) {
+              await fetchTasks();
+            }
+          } catch (error) {
+            console.error("Error updating task:", error);
+          }
+        },
+        deleteTask: async (id) => {
+          try {
+            const response = await fetch(`${API_URL}/task/${id}`, {
+              method: "DELETE",
+              credentials: "include",
+            });
+            if (response.ok) {
+              await fetchTasks();
+            }
+          } catch (error) {
+            console.error("Error deleting task:", error);
+          }
+        },
         priorityFilter,
         setPriorityFilter,
         completionFilter,
