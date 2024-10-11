@@ -142,9 +142,9 @@ Visualize as tarefas de acordo com seu status atual:
 5. Abra um Pull Request
 
 ## Deploy
-
-Adicione aqui informações sobre como fazer o deploy da aplicação, incluindo ambientes e URLs relevantes.
-
+```bash
+https://task-manager-2t9e.vercel.app/login
+```
 ## Licença
 
 Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais informações.
