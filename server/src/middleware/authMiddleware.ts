@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import User from "../models/auth/UserModel.ts";
+import User, { UserDocument } from "../models/auth/UserModel.ts";
 
 interface JwtPayload {
   id: string;
 }
 
-export const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+interface AuthenticatedRequest extends Request {
+  user?: UserDocument;
+}
+
+export const protect = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies.token;
 
@@ -32,6 +36,7 @@ export const protect = asyncHandler(async (req: Request, res: Response, next: Ne
     res.status(401).json({ message: "Not authorized, token failed!" });
   }
 });
+
 
 export const adminMiddleware = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   if (req.user && req.user.role === "admin") {
