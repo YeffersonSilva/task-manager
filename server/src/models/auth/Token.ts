@@ -1,48 +1,22 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
-// Define an interface for the Token document
-interface IToken extends Document {
-  userId: mongoose.Schema.Types.ObjectId;
-  verificationToken: string;
-  passwordResetToken: string;
+export interface TokenDocument extends Document {
+  userId: Types.ObjectId;
+  verificationToken?: string;
+  passwordResetToken?: string;
   createdAt: Date;
   expiresAt: Date;
 }
 
-// Create the Token schema
-const TokenSchema: Schema = new mongoose.Schema({
-  // Reference to the user this token belongs to
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const tokenSchema = new Schema<TokenDocument>(
+  {
+    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    verificationToken: { type: String },
+    passwordResetToken: { type: String },
+    createdAt: { type: Date, required: true },
+    expiresAt: { type: Date, required: true },
   },
+  { timestamps: true }
+);
 
- 
-  verificationToken: {
-    type: String,
-    default: "",
-  },
-
-  
-  passwordResetToken: {
-    type: String,
-    default: "",
-  },
-
-  createdAt: {
-    type: Date,
-    required: true,
-  },
-
-  
-  expiresAt: {
-    type: Date,
-    required: true,
-  },
-});
-
-
-const Token = mongoose.model<IToken>("Token", TokenSchema);
-
-export default Token;
+export default mongoose.model<TokenDocument>('Token', tokenSchema);
