@@ -45,6 +45,8 @@ routeFiles.forEach((file) => {
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+export { app };
+
 const server = async () => {
   try {
     await connect();
@@ -56,5 +58,6 @@ const server = async () => {
     process.exit(1);
   }
 };
+
 
 server();
