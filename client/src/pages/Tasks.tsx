@@ -36,6 +36,8 @@ const Tasks: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  // Filtrar tarefas
+  
   const filteredTasks = tasks.filter((task) => {
     const mappedPriority = priorityMap[priorityFilter.toLowerCase()];
     const matchesPriority =

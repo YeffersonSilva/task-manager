@@ -10,6 +10,11 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
 
+  /**
+   * Handles the registration form submission.
+   * Uses the register function from AuthContext to create a new user.
+   * Navigates to the login page upon successful registration.
+   */
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -21,6 +26,10 @@ const Register: React.FC = () => {
     }
   };
 
+  /**
+   * Toggles between the login and registration form.
+   * Updates the state and navigates to the respective route.
+   */
   const toggleLoginRegister = () => {
     setIsLogin(!isLogin);
     navigate(isLogin ? "/register" : "/login");
@@ -30,10 +39,18 @@ const Register: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-200 to-gray-400">
       <div className="w-full max-w-lg overflow-hidden transition-all duration-500 transform bg-white rounded-lg shadow-lg">
         <div className="p-8">
-          <h2 className="mb-6 text-3xl font-bold text-center">{isLogin ? "Entrar" : "Cadastrar-se"}</h2>
+          {/* Display either "Entrar" or "Cadastrar-se" based on the current state */}
+
+          <h2 className="mb-6 text-3xl font-bold text-center">
+            {isLogin ? "Entrar" : "Cadastrar-se"}
+          </h2>
           <p className="mb-4 text-center text-gray-500">
-            {isLogin ? "Use seu e-mail e senha para acessar" : "Crie sua conta usando seu e-mail"}
+            {isLogin
+              ? "Use seu e-mail e senha para acessar"
+              : "Crie sua conta usando seu e-mail"}
           </p>
+          {/* Registration form */}
+
           <form onSubmit={handleRegister}>
             {!isLogin && (
               <div className="mb-4">
@@ -47,6 +64,8 @@ const Register: React.FC = () => {
                 />
               </div>
             )}
+            {/* Email input field */}
+
             <div className="mb-4">
               <label className="block mb-2 text-gray-700">E-mail</label>
               <input

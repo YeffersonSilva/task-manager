@@ -9,6 +9,8 @@ import {
 import { TaskContext } from "../contex/TaskContext";
 import { AuthContext } from "../contex/AuthContext";
 
+// Definition of the interface for the context
+
 const Sidebar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const {

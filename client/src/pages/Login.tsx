@@ -9,6 +9,13 @@ const Login: React.FC = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  /**
+   * Handles the login form submission.
+   * Uses the login function from AuthContext to authenticate the user.
+   * Navigates to the '/tasks' page upon successful login.
+   * Displays an error message if the login fails.
+   */
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -32,7 +39,13 @@ const Login: React.FC = () => {
           <p className="mb-4 text-center text-gray-500">
             Use seu e-mail e senha para acessar
           </p>
-          {error && <div role="alert" className="mb-4 text-red-500">{error}</div>}
+          {/* Display error message if there is any */}
+
+          {error && (
+            <div role="alert" className="mb-4 text-red-500">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label htmlFor="email" className="block mb-2 text-gray-700">
