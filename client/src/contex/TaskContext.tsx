@@ -1,7 +1,8 @@
-import React, { createContext, useState, useEffect } from "react";
+// src/context/TaskContext.tsx
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { ITask } from "../types/Task";
+import { AuthContext } from "./AuthContext";
 
-// Definición de la interfaz para el contexto
 interface TaskContextProps {
   tasks: ITask[];
   fetchTasks: () => Promise<void>;
@@ -16,7 +17,6 @@ interface TaskContextProps {
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
-// Creación del contexto con valores predeterminados
 export const TaskContext = createContext<TaskContextProps>({
   tasks: [],
   fetchTasks: async () => {},
@@ -31,7 +31,6 @@ export const TaskContext = createContext<TaskContextProps>({
   setSearchTerm: () => {},
 });
 
-// Proveedor del contexto para encapsular los componentes que lo usan
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -39,32 +38,25 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
   const [priorityFilter, setPriorityFilter] = useState<string>("todas");
   const [completionFilter, setCompletionFilter] = useState<string>("todas");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const { user } = useContext(AuthContext);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // Función para obtener las tareas desde el backend
   const fetchTasks = async () => {
+    if (!user) return; // Si no hay usuario, no buscar tareas.
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         credentials: "include",
       });
       const data = await response.json();
-      console.log("Data received from API:", data);
       if (response.ok) {
-        if (Array.isArray(data)) {
-          setTasks(data);
-        } else if (Array.isArray(data.tasks)) {
-          setTasks(data.tasks);
-        } else {
-          console.error("Unexpected data structure:", data);
-        }
+        setTasks(Array.isArray(data) ? data : data.tasks);
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
-  // Función para crear una nueva tarea
   const createTask = async (task: ITask) => {
     try {
       const response = await fetch(`${API_URL}/task/create`, {
@@ -73,15 +65,21 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
       });
-      if (response.ok) {
-        await fetchTasks();
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error creating task:', errorData.message);
+        // Muestra el error en el frontend si es necesario
+        return;
       }
+      
+      await fetchTasks();
     } catch (error) {
       console.error("Error creating task:", error);
     }
   };
+  
 
-  // Función para actualizar una tarea existente
   const updateTask = async (task: ITask) => {
     try {
       const response = await fetch(`${API_URL}/task/${task._id}`, {
@@ -98,7 +96,6 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Función para eliminar una tarea
   const deleteTask = async (id: string) => {
     try {
       const response = await fetch(`${API_URL}/task/${id}`, {
@@ -113,10 +110,9 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Efecto para obtener las tareas cuando se monta el componente
   useEffect(() => {
     fetchTasks();
-  }, [API_URL]);
+  }, [user]);
 
   return (
     <TaskContext.Provider
